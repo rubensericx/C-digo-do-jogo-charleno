@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Clique na Cor Certa</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-top: 10px;
+    }
+
+    #color-name {
+      font-size: 40px;
+      margin: 30px 0;
+      font-weight: bold;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .color-btn {
+      width: 100px;
+      height: 100px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #score {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    #timer {
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    #game-over {
+      font-size: 24px;
+      color: red;
+      display: none;
+      margin-top: 20px;
+    }
+
+    #restart {
+      padding: 10px 20px;
+      font-size: 16px;
+      display: none;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎨 Clique na Cor Certa!</h1>
+  <div id="color-name">Azul</div>
+
+  <div class="buttons">
+    <button class="color-btn" style="background-color: red;" onclick="checkColor('vermelho')"></button>
+    <button class="color-btn" style="background-color: blue;" onclick="checkColor('azul')"></button>
+    <button class="color-btn" style="background-color: green;" onclick="checkColor('verde')"></button>
+    <button class="color-btn" style="background-color: yellow;" onclick="checkColor('amarelo')"></button>
+    <button class="color-btn" style="background-color: purple;" onclick="checkColor('roxo')"></button>
+  </div>
+
+  <div id="score">Pontuação: 0</div>
+  <div id="timer">⏱️ Tempo restante: 30s</div>
+  <div id="game-over">⛔ Fim de jogo!</div>
+  <button id="restart" onclick="location.reload()">Jogar Novamente</button>
+
+  <script>
+    const colorName = document.getElementById('color-name');
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    const gameOverEl = document.getElementById('game-over');
+    const restartBtn = document.getElementById('restart');
+
+    const colors = ['vermelho', 'azul', 'verde', 'amarelo', 'roxo'];
+    const cssColors = {
+      vermelho: 'red',
+      azul: 'blue',
+      verde: 'green',
+      amarelo: 'yellow',
+      roxo: 'purple'
+    };
+
+    let currentColor = '';
+    let score = 0;
+    let timeLeft = 30;
+    let timer;
+
+    function randomColor() {
+      const colorText = colors[Math.floor(Math.random() * colors.length)];
+      const colorStyle = cssColors[colors[Math.floor(Math.random() * colors.length)]];
+
+      currentColor = colorText;
+      colorName.textContent = colorText.charAt(0).toUpperCase() + colorText.slice(1);
+      colorName.style.color = colorStyle;
+    }
+
+    function checkColor(colorClicked) {
+      if (timeLeft <= 0) return;
+
+      if (colorClicked === currentColor) {
+        score++;
+        scoreEl.textContent = `Pontuação: ${score}`;
+      } else {
+        score--;
+        scoreEl.textContent = `Pontuação: ${score}`;
+      }
+
+      randomColor();
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `⏱️ Tempo restante: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          gameOverEl.style.display = 'block';
+          restartBtn.style.display = 'inline-block';
+        }
+      }, 1000);
+    }
+
+    // Iniciar o jogo
+    randomColor();
+    startTimer();
+  </script>
+
+</body>
+</html>
